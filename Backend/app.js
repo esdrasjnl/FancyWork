@@ -1,6 +1,6 @@
-const express = require('express')
-    //const mysqldb =require('./database/database');
+const express = require('express');
 const bodyparser = require('body-parser');
+const mysqldb = require('./database/database');
 
 const app = express();
 //----- Para enviar datos por JSON
@@ -15,6 +15,6 @@ app.listen(PORT, () => {
 });
 
 
-//mysqldb.connect();
+mysqldb.connect();
 
 //app.use('/bgricel/usuario/',require('./routes/usuario.route'));
