@@ -1,27 +1,22 @@
-import React, { createContext, useContext, useState } from "react";
-import api from "../api/axiosConfig";
+import React, { createContext, useState, useContext } from "react";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("user"));
-    } catch {
-      return null;
-    }
-  });
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
 
-  const login = async (credentials) => {
-    const res = await api.post("/auth/login", credentials);
-    const { token, user: userData } = res.data;
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+  const login = async (email, password) => {
+    // Aquí luego harás fetch a tu backend
+    if (email === "admin@fancywork.com" && password === "123456") {
+      const fakeUser = { name: "Administrador", email };
+      localStorage.setItem("user", JSON.stringify(fakeUser));
+      setUser(fakeUser);
+      return true;
+    }
+    return false;
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
   };
@@ -31,6 +26,8 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}
