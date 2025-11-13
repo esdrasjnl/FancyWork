@@ -1,2 +1,3 @@
 frontend-fancywork/node_modules
 frontend-fancywork/.env
+/backend/user-service/node_modules
