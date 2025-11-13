@@ -9,7 +9,9 @@ export const userSchema = Joi.object({
   picture: Joi.string().max(200).optional(),
   phone_main: Joi.string().max(50).required(),
   phone_secondary: Joi.string().max(50).optional(),
-  registrarion_date: Joi.date().default(() => new Date(), 'current date'),
+
+  registration_date: Joi.date().default(() => new Date()),
+
   date_birth: Joi.date().optional(),
   id_rol: Joi.number().integer().required()
 });
