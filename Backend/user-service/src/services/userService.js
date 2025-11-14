@@ -1,64 +1,75 @@
-import { pool } from '../config/db.js';
+import { pool } from "../config/db.js";
 
-export const userService = {
-  async createUser(user) {
-    const [result] = await pool.query(
-      `INSERT INTO t_user (name_user, last_name, direction, email, password_user, picture,
-        phone_main, phone_secondary, registrarion_date, date_birth, id_rol)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        user.name_user,
-        user.last_name,
-        user.direction,
-        user.email,
-        user.password_user,
-        user.picture,
-        user.phone_main,
-        user.phone_secondary,
-        user.registrarion_date,
-        user.date_birth,
-        user.id_rol
-      ]
-    );
-    return { id_user: result.insertId, ...user };
-  },
+export const createUser = async (data) => {
+    const {
+        name_user,
+        last_name,
+        direction,
+        email,
+        password_user,
+        picture,
+        phone_main,
+        phone_secondary,
+        registrarion_date,
+        date_birth,
+        id_rol
+    } = data;
 
-  async getUsers() {
-    const [rows] = await pool.query('SELECT * FROM t_user');
+    const sql = `
+        INSERT INTO t_user(
+            name_user, last_name, direction, email,
+            password_user, picture, phone_main, phone_secondary,
+            registrarion_date, date_birth, id_rol
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const [result] = await pool.query(sql, [
+        name_user,
+        last_name,
+        direction,
+        email,
+        password_user,
+        picture,
+        phone_main,
+        phone_secondary,
+        registrarion_date,
+        date_birth,
+        id_rol,
+    ]);
+
+    return result.insertId;
+};
+
+export const getUsers = async () => {
+    const [rows] = await pool.query("SELECT * FROM t_user");
     return rows;
-  },
+};
 
-  async getUserById(id) {
-    const [rows] = await pool.query('SELECT * FROM t_user WHERE id_user = ?', [id]);
-    return rows[0];
-  },
-
-  async updateUser(id, user) {
-    await pool.query(
-      `UPDATE t_user
-       SET name_user=?, last_name=?, direction=?, email=?, password_user=?, picture=?, 
-           phone_main=?, phone_secondary=?, registrarion_date=?, date_birth=?, id_rol=?
-       WHERE id_user=?`,
-      [
-        user.name_user,
-        user.last_name,
-        user.direction,
-        user.email,
-        user.password_user,
-        user.picture,
-        user.phone_main,
-        user.phone_secondary,
-        user.registrarion_date,
-        user.date_birth,
-        user.id_rol,
-        id
-      ]
+export const getUserById = async (id_user) => {
+    const [row] = await pool.query(
+        "SELECT * FROM t_user WHERE id_user = ?",
+        [id_user]
     );
-    return { id_user: id, ...user };
-  },
+    return row[0];
+};
 
-  async deleteUser(id) {
-    await pool.query('DELETE FROM t_user WHERE id_user = ?', [id]);
-    return { message: 'Usuario eliminado correctamente' };
-  }
+export const updateUser = async (id_user, data) => {
+    const keys = Object.keys(data);
+    const values = Object.values(data);
+
+    const setClause = keys.map((key) => `${key} = ?`).join(", ");
+
+    const sql = `UPDATE t_user SET ${setClause} WHERE id_user = ?`;
+
+    const [result] = await pool.query(sql, [...values, id_user]);
+
+    return result.affectedRows;
+};
+
+export const deleteUser = async (id_user) => {
+    const [result] = await pool.query(
+        "DELETE FROM t_user WHERE id_user = ?",
+        [id_user]
+    );
+    return result.affectedRows;
 };

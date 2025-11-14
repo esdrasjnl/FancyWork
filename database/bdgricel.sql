@@ -1,29 +1,29 @@
-create database bdgricel;
-use bdgricel;
+CREATE DATABASE fancy_work;
+USE fancy_work;
 
-create table t_rol(
-	id_rol integer auto_increment,
-    name_rol varchar(100),
-    description varchar(200),
-    constraint pk_rol primary key(id_rol)
-);
+CREATE TABLE IF NOT EXISTS t_rol (
+	id_rol INTEGER AUTO_INCREMENT
+	,name_rol VARCHAR(100)
+	,description_rol VARCHAR(200)
+	,CONSTRAINT pk_rol PRIMARY KEY (id_rol)
+	);
 
-create table t_user(
-	id_user integer auto_increment,
-    name_user varchar(100),
-    last_name varchar(100),
-    direction varchar(200),
-    email varchar(200),
-    password varchar(20),
-    picture varchar(200),
-    phone_main varchar(50),
-    phone_secondary varchar(50),
-    registrarion_date date,
-    date_birth date,
-    id_rol integer,
-    constraint pk_user primary key(id_user),
-    constraint fk_rol foreign key (id_rol) references t_rol(id_rol) on delete cascade
-);
+CREATE TABLE IF NOT EXISTS t_user (
+	id_user INTEGER AUTO_INCREMENT
+	,name_user VARCHAR(100)
+	,last_name VARCHAR(100)
+	,direction VARCHAR(200)
+	,email VARCHAR(200)
+	,password_user VARCHAR(20)
+	,picture VARCHAR(200)
+	,phone_main VARCHAR(50)
+	,phone_secondary VARCHAR(50)
+	,registrarion_date DATE
+	,date_birth DATE
+	,id_rol INTEGER
+	,CONSTRAINT pk_user PRIMARY KEY (id_user)
+	,CONSTRAINT fk_rol FOREIGN KEY (id_rol) REFERENCES t_rol(id_rol) ON DELETE CASCADE
+	);
 
 create table t_client(
 	id_client integer auto_increment,
