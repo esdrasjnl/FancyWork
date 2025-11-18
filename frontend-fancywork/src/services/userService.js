@@ -3,14 +3,14 @@ import httpClient from "../api/httpClient";
 export const userService = {
   
   register(data) {
-    return httpClient.post("/api/users/register", data);
+    return httpClient.post("/users", data);
   },
 
   login(data) {
-    return httpClient.post("/api/users/login", data);
+    return httpClient.post("/users/login", data);
   },
 
   getProfile() {
-    return httpClient.get("/api/users/profile");
+    return httpClient.get("/users/profile");
   }
 };

@@ -1,16 +1,17 @@
 import React from "react";
-import TextField from "@mui/material/TextField";
+import { Form } from "react-bootstrap";
 
-export default function FancyInput({ label, value, onChange, type = "text" }) {
+export default function FancyInput({ label, name, value, onChange, type = "text", required = false }) {
   return (
-    <TextField
-      fullWidth
-      variant="outlined"
-      label={label}
-      type={type}
-      value={value}
-      onChange={onChange}
-      sx={{ mb: 2 }}
-    />
+    <Form.Group className="mb-3">
+      {label && <Form.Label>{label}</Form.Label>}
+      <Form.Control
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+      />
+    </Form.Group>
   );
 }

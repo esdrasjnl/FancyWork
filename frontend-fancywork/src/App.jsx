@@ -1,12 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/RegisterPage.jsx";
-import { useAuth, AuthProvider } from "./context/AuthContext.jsx";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 function PrivateRoute({ children }) {
-  const { user } = useAuth();
-  return user ? children : <Navigate to="/login" />;
+  const { user, loading } = useAuth();
+  // Mientras carga el perfil, no redirijas (puedes mostrar spinner global si quieres)
+  if (loading) return null;
+  return user ? children : <Navigate to="/login" replace />;
 }
 
 export default function App() {
@@ -14,25 +16,16 @@ export default function App() {
     <AuthProvider>
       <Router>
         <Routes>
-
-          {/* RUTAS PÚBLICAS */}
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />  {/* <-- YA NO ES PRIVADA */}
-
-          {/* RUTA PROTEGIDA */}
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <h1 style={{ textAlign: "center", marginTop: "2rem" }}>
-                  Bienvenido a FancyWork 👕
-                </h1>
-              </PrivateRoute>
-            }
-          />
-
-          {/* DEFAULT */}
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={
+            <PrivateRoute>
+              <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                <h1>Bienvenido a FancyWork 👕</h1>
+              </div>
+            </PrivateRoute>
+          } />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
     </AuthProvider>

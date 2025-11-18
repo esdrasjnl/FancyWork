@@ -1,54 +1,77 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { userService } from "../services/userService";
 
-const AuthContext = createContext();
+export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // Carga inicial si hay token
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
     }
+
+    // intenta obtener perfil
+    userService.getProfile()
+      .then(res => {
+        setUser(res.data.user || res.data); // adapta según respuesta
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email, password) => {
-    try {
-      const res = await fetch("http://localhost:3000/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        return { success: false, message: data.message || "Credenciales inválidas" };
+  const login = async (email, password_user) => {
+    const res = await userService.login({ email, password_user });
+    // Se espera token y user (ajusta según tu backend)
+    if (res.status === 200) {
+      const { token, user } = res.data;
+      if (token) localStorage.setItem("token", token);
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+      } else {
+        // si backend devuelve solo user
+        setUser(res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
       }
-
-      localStorage.setItem("user", JSON.stringify(data));
-      setUser(data);
-
       return { success: true };
-    } catch (error) {
-      return { success: false, message: "Error conectando al servidor" };
     }
+    return { success: false };
+  };
+
+  const register = async (form) => {
+    const res = await userService.register(form);
+    if (res.status === 201 || res.status === 200) {
+      // si backend devuelve token+user, guárdalos; si no, solo user
+      const { token, user } = res.data;
+      if (token) localStorage.setItem("token", token);
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+      }
+      return { success: true, data: res.data };
+    }
+    return { success: false };
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
-export default AuthContext;
+export const useAuth = () => useContext(AuthContext);
