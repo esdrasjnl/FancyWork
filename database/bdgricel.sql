@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS t_user (
 	,last_name VARCHAR(100)
 	,direction VARCHAR(200)
 	,email VARCHAR(200)
-	,password_user VARCHAR(20)
+	,password_user VARCHAR(1000)
 	,picture VARCHAR(200)
 	,phone_main VARCHAR(50)
 	,phone_secondary VARCHAR(50)
