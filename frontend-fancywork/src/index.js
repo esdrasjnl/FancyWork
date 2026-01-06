@@ -1,14 +1,13 @@
+// src/index.js
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import theme from "./styles/theme";
+
+// CSS bootstrap
+import "bootstrap/dist/css/bootstrap.min.css";
+
+// Tus estilos propios
+import "./styles/Sidebar.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <App />
-  </ThemeProvider>
-);
+root.render(<App />);
