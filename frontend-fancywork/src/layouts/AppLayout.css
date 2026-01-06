@@ -1,0 +1,6 @@
+.content {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  min-height: 100vh;
+  background: #f6f7fa;
+}
