@@ -3,7 +3,8 @@ import { Card, Container, Row, Col, Button, Form, Alert } from "react-bootstrap"
 //import FancyInput from "../components/FancyInput";
 import FancyInput  from "../components/common/FancyInput";
 //import { useAuth } from "../context/AuthContext";
-import { useAuth } from "../context/AuthContext";
+//import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {

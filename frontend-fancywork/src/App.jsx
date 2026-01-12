@@ -9,7 +9,8 @@ import ProfilePage from "./pages/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
 
 import AppLayout from "./layouts/AppLayout";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth";
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
