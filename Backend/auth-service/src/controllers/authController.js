@@ -70,6 +70,7 @@ export async function register(req, res) {
 
 export async function login(req, res) {
   try {
+    console.log("Los datos son::: ",req.body);
     const { error, value } = loginSchema.validate(req.body, { stripUnknown: true });
     if (error) return res.status(400).json({ message: error.details.map(d => d.message).join(", ") });
 

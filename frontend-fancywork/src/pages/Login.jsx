@@ -10,7 +10,11 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password_user: "" });
+  //const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({
+    email: "",
+    password_user: ""
+  });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +25,8 @@ export default function Login() {
     setError(null);
     setLoading(true);
     try {
-      const r = await login(form.email, form.password_user);
+      //const r = await login(form.email, form.password);
+      const r = await login(form);
       if (r.success) navigate("/dashboard");
       else setError(r.message || "Credenciales inválidas");
     } catch (err) {
@@ -40,7 +45,14 @@ export default function Login() {
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
               <FancyInput label="Correo" name="email" value={form.email} onChange={handleChange} required />
-              <FancyInput label="Contraseña" name="password_user" type="password" value={form.password_user} onChange={handleChange} required />
+              <FancyInput
+                label="Contraseña"
+                name="password_user"
+                type="password"
+                value={form.password_user}
+                onChange={handleChange}
+                required
+              />
               <Button type="submit" variant="primary" className="w-100 mt-2" disabled={loading}>
                 {loading ? "Entrando..." : "Entrar"}
               </Button>
