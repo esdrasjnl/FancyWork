@@ -1,2 +1,2 @@
 # FancyWork
-Control Sales Software
+Sales Control Software
