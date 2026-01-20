@@ -27,7 +27,7 @@ export default function Login() {
     try {
       //const r = await login(form.email, form.password);
       const r = await login(form);
-      if (r.success) navigate("/dashboard");
+      if (r.token) navigate("/dashboard");
       else setError(r.message || "Credenciales inválidas");
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Error al conectar");
