@@ -4,3 +4,4 @@ frontend-fancywork/.env
 /backend/user-service/.env
 /frontend-fancywork/node_modules
 /backend/auth-service/node_modules
+.DS_Store
